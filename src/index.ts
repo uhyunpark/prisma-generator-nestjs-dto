@@ -2,7 +2,8 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import makeDir from 'make-dir';
 import { generatorHandler } from '@prisma/generator-helper';
-import { parseEnvValue } from '@prisma/sdk';
+import { parseEnvValue } from '@prisma/internals';
+import prettier from 'prettier';
 
 import { run } from './generator';
 
@@ -63,6 +64,12 @@ export const generate = (options: GeneratorOptions) => {
     );
   }
 
+  const monorepo = stringToBoolean(
+    options.generator.config.monorepo,
+    // using `true` as default value would be a breaking change
+    false,
+  );
+
   const results = run({
     output,
     dmmf: options.dmmf,
@@ -75,6 +82,7 @@ export const generate = (options: GeneratorOptions) => {
     entityPrefix,
     entitySuffix,
     fileNamingStyle,
+    monorepo,
   });
 
   const indexCollections: Record<string, WriteableFileSpecs> = {};
@@ -98,8 +106,16 @@ export const generate = (options: GeneratorOptions) => {
     results
       .concat(Object.values(indexCollections))
       .map(async ({ fileName, content }) => {
+        const formattedContent = prettier.format(content, {
+          parser: 'typescript',
+          semi: false,
+          singleQuote: true,
+          trailingComma: 'all',
+          tabWidth: 2,
+          printWidth: 100,
+        });
         await makeDir(path.dirname(fileName));
-        return fs.writeFile(fileName, content);
+        return fs.writeFile(fileName, formattedContent);
       }),
   );
 };

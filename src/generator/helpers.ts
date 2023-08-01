@@ -31,7 +31,7 @@ export const makeImportsFromPrismaClient = (
   }
 
   return {
-    from: '@prisma/client',
+    from: '.prisma/client',
     destruct: importPrisma ? ['Prisma', ...enumsToImport] : enumsToImport,
   };
 };

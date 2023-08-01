@@ -3,6 +3,12 @@ datasource db {
   url      = "postgresql://johndoe:mypassword@localhost:5432/mydb?schema=public"
 }
 
+generator client {
+  provider        = "prisma-client-js"
+  engineType      = "binary"
+  output          = "../node_modules/.prisma/client" // <-- generate in your package node_modules, not the root (check https://github.com/prisma/prisma/issues/6603#issuecomment-1054227614)
+}
+
 generator nestjsDto {
   provider                        = "node -r ts-node/register/transpile-only src/cli.ts"
   output                          = "../src/@generated/prisma-generator-nestjs-dto"
@@ -15,6 +21,7 @@ generator nestjsDto {
   entityPrefix                    = ""
   entitySuffix                    = ""
   fileNamingStyle                 = "camel"
+  monorepo                       = "true"
 }
 
 model Product {

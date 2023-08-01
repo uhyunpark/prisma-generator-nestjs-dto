@@ -70,6 +70,12 @@ export const generate = (options: GeneratorOptions) => {
     false,
   );
 
+  const dtoInFileName = stringToBoolean(
+    options.generator.config.dtoInFileName,
+    // using `true` as default value would be a breaking change
+    false,
+  );
+
   const results = run({
     output,
     dmmf: options.dmmf,
@@ -79,6 +85,7 @@ export const generate = (options: GeneratorOptions) => {
     createDtoPrefix,
     updateDtoPrefix,
     dtoSuffix,
+    dtoInFileName,
     entityPrefix,
     entitySuffix,
     fileNamingStyle,

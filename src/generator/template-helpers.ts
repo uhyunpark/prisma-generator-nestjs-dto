@@ -84,6 +84,7 @@ interface MakeHelpersParam {
   createDtoPrefix: string;
   updateDtoPrefix: string;
   dtoSuffix: string;
+  dtoInFileName: boolean;
   entityPrefix: string;
   entitySuffix: string;
   transformClassNameCase?: (item: string) => string;
@@ -94,6 +95,7 @@ export const makeHelpers = ({
   createDtoPrefix,
   updateDtoPrefix,
   dtoSuffix,
+  dtoInFileName,
   entityPrefix,
   entitySuffix,
   transformClassNameCase = echo,
@@ -122,13 +124,13 @@ export const makeHelpers = ({
     className(name, updateDtoPrefix, dtoSuffix);
 
   const connectDtoFilename = (name: string, withExtension = false) =>
-    fileName(name, 'connect-', '.dto', withExtension);
+    fileName(name, 'connect-', `${when(dtoInFileName, 'dto')}`, withExtension);
 
   const createDtoFilename = (name: string, withExtension = false) =>
-    fileName(name, 'create-', '.dto', withExtension);
+    fileName(name, 'create-', `${when(dtoInFileName, 'dto')}`, withExtension);
 
   const updateDtoFilename = (name: string, withExtension = false) =>
-    fileName(name, 'update-', '.dto', withExtension);
+    fileName(name, 'update-', `${when(dtoInFileName, 'dto')}`, withExtension);
 
   const entityFilename = (name: string, withExtension = false) =>
     fileName(name, undefined, '.entity', withExtension);

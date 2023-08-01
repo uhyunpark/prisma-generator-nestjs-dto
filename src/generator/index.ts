@@ -24,6 +24,7 @@ interface RunParam {
   dtoSuffix: string;
   entityPrefix: string;
   entitySuffix: string;
+  dtoInFileName: boolean;
   fileNamingStyle: NamingStyle;
   monorepo: boolean;
 }
@@ -31,6 +32,8 @@ interface RunParam {
 export const run = ({
   output,
   dmmf,
+  monorepo,
+  dtoInFileName,
   ...options
 }: RunParam): WriteableFileSpecs[] => {
   const {
@@ -52,6 +55,7 @@ export const run = ({
   const templateHelpers = makeHelpers({
     transformFileNameCase,
     transformClassNameCase: pascal,
+    dtoInFileName,
     ...preAndSuffixes,
   });
   const allModels = dmmf.datamodel.models;

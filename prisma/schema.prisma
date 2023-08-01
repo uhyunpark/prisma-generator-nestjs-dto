@@ -21,7 +21,7 @@ generator nestjsDto {
   entityPrefix                    = ""
   entitySuffix                    = ""
   fileNamingStyle                 = "camel"
-  monorepo                       = "true"
+  monorepo                        = "true"
 }
 
 model Product {
